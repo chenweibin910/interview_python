@@ -476,7 +476,7 @@ http://stackoverflow.com/questions/3394835/args-and-kwargs
 
 这篇文章很好的介绍了新式类的特性: http://www.cnblogs.com/btchenguang/archive/2012/09/17/2689146.html
 
-新式类很早在2.2就出现了,所以旧式类完全是兼容的问题,Python3里的类全部都是新式类.这里有一个MRO问题可以了解下(新式类是广度优先,旧式类是深度优先),<Python核心编程>里讲的也很多.
+新式类很早在2.2就出现了,所以旧式类完全是兼容的问题,Python3里的类全部都是新式类.这里有一个MRO问题可以了解下(新式类继承是根据C3算法,旧式类是深度优先),<Python核心编程>里讲的也很多.
 
 > 一个旧式类的深度优先的例子
 
@@ -1569,21 +1569,21 @@ def node(l1, l2):
 ```python
 
 #coding:utf-8
-def binary_search(list,item):
+def binary_search(list, item):
     low = 0
-    high = len(list)-1
-    while low<=high:
-        mid = (low+high)/2
+    high = len(list) - 1
+    while low <= high:
+        mid = (high - low) / 2 + low    # 避免(high + low) / 2溢出
         guess = list[mid]
-        if guess>item:
-            high = mid-1
-        elif guess<item:
-            low = mid+1
+        if guess > item:
+            high = mid - 1
+        elif guess < item:
+            low = mid + 1
         else:
             return mid
     return None
 mylist = [1,3,5,7,9]
-print binary_search(mylist,3)
+print binary_search(mylist, 3)
 
 ```
 
@@ -1705,7 +1705,7 @@ class Node(object):
 #中序遍历:遍历左子树,访问当前节点,遍历右子树
 
 def mid_travelsal(root):
-    if root.left is None:
+    if root.left is not None:
         mid_travelsal(root.left)
     #访问当前节点
     print(root.value)
